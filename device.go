@@ -55,5 +55,11 @@ const NameSupport = 0
 // On/Off Attributes
 const OnOff = 0
 
+//OnOff Values
+const (
+	Off = 0x00
+	On = 0x01
+)
+
 // Level Attributes
 const Level = 0
