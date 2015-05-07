@@ -47,5 +47,5 @@ type HAGateway interface {
 	SendAsync() error
 	Send() error
 	SetOnOff(z ZigbeeDevice, endpointid uint8, value uint8) error
-	SetLevel(z ZigbeeDevice, endpointid uint8, value uint8, transitiontime uint16) error
+	SetLightLevel(z ZigbeeDevice, endpointid uint8, level uint8, transitiontime uint16) error
 }

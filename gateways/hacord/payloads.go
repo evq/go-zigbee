@@ -3,6 +3,7 @@ package hacord
 //Cmds
 const (
 	OnOff = 0x0400
+	LightLevel = 0x0c00
 )
 
 //OnOff Values
@@ -18,7 +19,23 @@ type OnOffPacket struct {
 }
 
 type OnOffPayload struct {
-	Val uint8 `struc:uint8`
+	State uint8 `struc:uint8`
+	NetAddr       uint16 `struc:uint16`
+	IeeeAddr      [8]uint8 `struc:[8]uint8`
+	SrcEndpoint uint8 `struc:uint8`
+	DestEndpoint uint8 `struc:uint8`
+	GroupId uint16 `struc:uint16`
+}
+
+type LightLevelPacket struct {
+	HACordHeader
+	MsgLen int `struc:"uint8,sizeof=Payload"`
+	Payload LightLevelPayload
+}
+
+type LightLevelPayload struct {
+	Level uint8 `struc:uint8`
+	TransitionTime       uint16 `struc:uint16`
 	NetAddr       uint16 `struc:uint16`
 	IeeeAddr      [8]uint8 `struc:[8]uint8`
 	SrcEndpoint uint8 `struc:uint8`

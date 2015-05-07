@@ -24,24 +24,26 @@ func main() {
 	dev.NetAddr = 0x98fd
 	dev.IeeeAddr = [8]byte{0x7c,0xe5,0x24,0x00,0x00,0x01,0x02,0x37}
 
-	err = z.SetLightLevel(dev, 0x01, 0xff, 10)
+	err = z.SetOnOff(dev, 0x01, zigbee.On)
 	if err != nil {
 		fmt.Println("Error serializing payload!")
 		fmt.Println(err)
 	}
-	fmt.Println("Transitioning light on")
+	fmt.Println("Turning light on")
 	err = z.Send()
 	if err != nil {
 		fmt.Println("Error sending!")
 		fmt.Println(err)
 	}
-    time.Sleep(20 * time.Second)
+
+	time.Sleep(2*time.Second)
 
 	err = z.SetLightLevel(dev, 0x01, 0x00, 10)
 	if err != nil {
 		fmt.Println("Error serializing payload!")
 		fmt.Println(err)
 	}
+
 	fmt.Println("Transitioning light off")
 	err = z.Send()
 	if err != nil {
@@ -49,5 +51,33 @@ func main() {
 		fmt.Println(err)
 	}
 
+	time.Sleep(2*time.Second)
+
+	err = z.SetLightLevel(dev, 0x01, 0xff, 10)
+	if err != nil {
+		fmt.Println("Error serializing payload!")
+		fmt.Println(err)
+	}
+
+	fmt.Println("Transitioning light on")
+	err = z.Send()
+	if err != nil {
+		fmt.Println("Error sending!")
+		fmt.Println(err)
+	}
+
+	time.Sleep(2*time.Second)
+
+	err = z.SetOnOff(dev, 0x01, zigbee.Off)
+	if err != nil {
+		fmt.Println("Error serializing payload!")
+		fmt.Println(err)
+	}
+	fmt.Println("Turning light off")
+	err = z.Send()
+	if err != nil {
+		fmt.Println("Error sending!")
+		fmt.Println(err)
+	}
 }
 

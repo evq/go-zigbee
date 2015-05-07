@@ -67,7 +67,12 @@ func (g *HACordGateway) SetOnOff(z zigbee.ZigbeeDevice, endpointid uint8, value 
 	return err
 }
 
-func (g *HACordGateway) SetLevel(z zigbee.ZigbeeDevice, endpointid uint8, value uint8, transitiontime uint16) error {
-	// Not implemented
-	return nil
+func (g *HACordGateway) SetLightLevel(z zigbee.ZigbeeDevice, endpointid uint8, level uint8, transitiontime uint16) error {
+	payload := LightLevelPacket{
+		HACordHeader{Command, g.Sequence, LightLevel}, 0,
+		LightLevelPayload{level, transitiontime, z.NetAddr, z.IeeeAddr, 0x01, endpointid, 0x0000},
+	}
+
+	err := struc.Pack(&g.TXBuffer, &payload)
+	return err
 }
