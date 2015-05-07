@@ -2,11 +2,7 @@ package zigbee
 
 import (
 	"time"
-}
-
-type ZigbeeMsg interface {
-	ToBytes() []byte
-}
+)
 
 type JoinResponse struct {
 	NetAddr       uint16
@@ -36,20 +32,20 @@ type AttributeResponse struct {
 
 type DeviceGateway interface {
   Connect(address string) error
-	SendAsync(msg ZigbeeMsg) error
-	Send(msg ZigbeeMsg) error
-	PermitJoining(duration time.Duration) (ZigbeeMsg, chan JoinResponse, error)
-	NodeDescriptorReq(z ZigbeeDevice) (ZigbeeMsg, chan NodeDescriptorResponse, error)
-	ActiveEndpointReq(z ZigbeeDevice) (ZigbeeMsg, chan ActiveEndpointResponse, error)
-	SimpleDescriptorReq(z ZigbeeDevice) (ZigbeeMsg, chan SimpleDescriptorResponse, error)
-	BindReq(z ZigbeeDevice, e Endpoint, c Cluster) (ZigbeeMsg, chan BindResponse, error)
-	ReadAttributes(z ZigbeeDevice, e Endpoint, c Cluster, attribids []uint8) (ZigbeeMsg, chan AttributeResponse, error)
+	SendAsync() error
+	Send() error
+	PermitJoining(duration time.Duration) (chan JoinResponse, error)
+	NodeDescriptorReq(z ZigbeeDevice) (chan NodeDescriptorResponse, error)
+	ActiveEndpointReq(z ZigbeeDevice) (chan ActiveEndpointResponse, error)
+	SimpleDescriptorReq(z ZigbeeDevice) (chan SimpleDescriptorResponse, error)
+	BindReq(z ZigbeeDevice, e Endpoint, c Cluster) (chan BindResponse, error)
+	ReadAttributes(z ZigbeeDevice, e Endpoint, c Cluster, attribids []uint8) (chan AttributeResponse, error)
 }
 
 type HAGateway interface {
   Connect(address string) error
-	SendAsync(msg ZigbeeMsg) (chan ZigbeeMsg, error)
-	Send(msg ZigbeeMsg) (ZigbeeMsg, error)
-	SetOnOff(z ZigbeeDevice, endpointid uint8, value uint8) (ZigbeeMsg, error)
-	SetLevel(z ZigbeeDevice, endpointid uint8, value uint8, transitiontime uint16) (ZigbeeMsg, error)
+	SendAsync() error
+	Send() error
+	SetOnOff(z ZigbeeDevice, endpointid uint8, value uint8) error
+	SetLevel(z ZigbeeDevice, endpointid uint8, value uint8, transitiontime uint16) error
 }
