@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/evq/go-zigbee"
 	"github.com/evq/go-zigbee/gateways/hacord"
-	"fmt"
 	"time"
 )
 
@@ -20,9 +20,9 @@ func main() {
 	}
 	fmt.Println("Connected")
 
-  dev := zigbee.ZigbeeDevice{}
+	dev := zigbee.ZigbeeDevice{}
 	dev.NetAddr = 0x98fd
-	dev.IeeeAddr = [8]byte{0x7c,0xe5,0x24,0x00,0x00,0x01,0x02,0x37}
+	dev.IeeeAddr = [8]byte{0x7c, 0xe5, 0x24, 0x00, 0x00, 0x01, 0x02, 0x37}
 
 	err = z.SetOnOff(dev, 0x01, zigbee.On)
 	if err != nil {
@@ -36,7 +36,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	time.Sleep(2*time.Second)
+	time.Sleep(2 * time.Second)
 
 	err = z.SetOnOff(dev, 0x01, zigbee.Off)
 	if err != nil {

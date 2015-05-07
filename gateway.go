@@ -5,8 +5,8 @@ import (
 )
 
 type JoinResponse struct {
-	NetAddr       uint16
-	IeeeAddr      [8]uint8
+	NetAddr  uint16
+	IeeeAddr [8]uint8
 }
 
 type NodeDescriptorResponse struct {
@@ -26,12 +26,12 @@ type BindResponse struct {
 }
 
 type AttributeResponse struct {
-  ID uint16
+	ID    uint16
 	Value string
 }
 
 type DeviceGateway interface {
-  Connect(address string) error
+	Connect(address string) error
 	SendAsync() error
 	Send() error
 	PermitJoining(duration time.Duration) (chan JoinResponse, error)
@@ -43,7 +43,7 @@ type DeviceGateway interface {
 }
 
 type HAGateway interface {
-  Connect(address string) error
+	Connect(address string) error
 	SendAsync() error
 	Send() error
 	SetOnOff(z ZigbeeDevice, endpointid uint8, value uint8) error

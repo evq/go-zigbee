@@ -1,31 +1,31 @@
 package hacord
 
 import (
-	"github.com/evq/go-zigbee"
 	"bytes"
 	"fmt"
-	"net"
+	"github.com/evq/go-zigbee"
 	"github.com/evq/struc"
+	"net"
 )
 
 // MsgTypes
 const (
-	Command = 0x43
-	HACordAck = 0x52
+	Command      = 0x43
+	HACordAck    = 0x52
 	NodeResponse = 0x42
 )
 
 type HACordHeader struct {
-	MsgType uint8 `struc:uint8`
-	Sequence uint8 `struc:uint8`
-	Cmd uint16 `struc:uint16`
+	MsgType  uint8  `struc:uint8`
+	Sequence uint8  `struc:uint8`
+	Cmd      uint16 `struc:uint16`
 }
 
 type HACordGateway struct {
-	Conn net.Conn
+	Conn       net.Conn
 	CurrentCmd uint16
-	Sequence uint8
-	TXBuffer bytes.Buffer
+	Sequence   uint8
+	TXBuffer   bytes.Buffer
 }
 
 func (g *HACordGateway) Connect(address string) error {
@@ -39,7 +39,6 @@ func (g *HACordGateway) SendAsync() error {
 	return nil
 }
 
- 
 func (g *HACordGateway) Send() error {
 	fmt.Println(g.TXBuffer.Bytes())
 

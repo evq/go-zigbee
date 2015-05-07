@@ -11,10 +11,10 @@ const (
 )
 
 type ZigbeeDevice struct {
-	Name          string
-	Endpoints     []Endpoint
-	NetAddr       uint16
-	IeeeAddr      [8]uint8
+	Name             string
+	Endpoints        []Endpoint
+	NetAddr          uint16
+	IeeeAddr         [8]uint8
 	ManufacturerCode uint16
 }
 
@@ -29,11 +29,11 @@ type Endpoint struct {
 // ProfileIDs
 const (
 	HomeAutomation = 0x0104
-	LightLink = 0xC05E
+	LightLink      = 0xC05E
 )
 
 type Cluster struct {
-	ID          uint16
+	ID         uint16
 	Attributes map[uint16]string
 }
 
@@ -58,7 +58,7 @@ const OnOff = 0
 //OnOff Values
 const (
 	Off = 0x00
-	On = 0x01
+	On  = 0x01
 )
 
 // Level Attributes
