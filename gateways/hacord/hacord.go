@@ -3,8 +3,9 @@ package hacord
 import (
 	"github.com/evq/go-zigbee"
 	"bytes"
+	"fmt"
 	"net"
-	"encoding/binary"
+	"github.com/evq/struc"
 )
 
 // MsgTypes
@@ -14,19 +15,17 @@ const (
 	NodeResponse = 0x42
 )
 
-type HACordPacket struct {
-	MsgType uint8
-	Sequence uint8
-	Cmd uint16
-	MsgLen uint8
-	//Payload []byte
+type HACordHeader struct {
+	MsgType uint8 `struc:uint8`
+	Sequence uint8 `struc:uint8`
+	Cmd uint16 `struc:uint16`
 }
 
 type HACordGateway struct {
 	Conn net.Conn
 	CurrentCmd uint16
 	Sequence uint8
-	TXBuffer []byte
+	TXBuffer bytes.Buffer
 }
 
 func (g *HACordGateway) Connect(address string) error {
@@ -40,21 +39,16 @@ func (g *HACordGateway) SendAsync() error {
 	return nil
 }
 
-
+ 
 func (g *HACordGateway) Send() error {
-	//pkt := HACordPacket{Command, g.Sequence, g.CurrentCmd, uint8(len(g.TXBuffer)), g.TXBuffer}
-	pkt := HACordPacket{Command, g.Sequence, g.CurrentCmd, uint8(len(g.TXBuffer))}
+	fmt.Println(g.TXBuffer.Bytes())
 
-	err := binary.Write(g.Conn, binary.BigEndian, pkt)
-	if err != nil {
-		return err
-	}
-	_, err = g.Conn.Write(g.TXBuffer)
-	if err != nil {
-		return err
-	}
+	_, err := g.Conn.Write(g.TXBuffer.Bytes())
+
 	g.Sequence++
-	return nil
+	g.TXBuffer.Reset()
+
+	return err
 }
 
 func (g *HACordGateway) SetOnOff(z zigbee.ZigbeeDevice, endpointid uint8, value uint8) error {
@@ -64,15 +58,13 @@ func (g *HACordGateway) SetOnOff(z zigbee.ZigbeeDevice, endpointid uint8, value 
 		value = HACordOff
 	}
 
-	payload := OnOffPayload{value, z.NetAddr, z.IeeeAddr, 0x01, endpointid, 0x0000}
-	buf := new(bytes.Buffer)
-	err := binary.Write(buf, binary.BigEndian, payload)
-	if err != nil {
-		return err
+	payload := OnOffPacket{
+		HACordHeader{Command, g.Sequence, OnOff}, 0,
+		OnOffPayload{value, z.NetAddr, z.IeeeAddr, 0x01, endpointid, 0x0000},
 	}
-	g.TXBuffer = buf.Bytes()
-	g.CurrentCmd = OnOff
-	return nil
+
+	err := struc.Pack(&g.TXBuffer, &payload)
+	return err
 }
 
 func (g *HACordGateway) SetLevel(z zigbee.ZigbeeDevice, endpointid uint8, value uint8, transitiontime uint16) error {

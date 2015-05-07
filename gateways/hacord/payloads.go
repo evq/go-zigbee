@@ -11,13 +11,19 @@ const (
 	HACordOn = 0x00
 )
 
+type OnOffPacket struct {
+	HACordHeader
+	MsgLen int `struc:"uint8,sizeof=Payload"`
+	Payload OnOffPayload
+}
+
 type OnOffPayload struct {
-	Val uint8
-	NetAddr       uint16
-	IeeeAddr      [8]uint8
-	SrcEndpoint uint8
-	DestEndpoint uint8
-	GroupId uint16
+	Val uint8 `struc:uint8`
+	NetAddr       uint16 `struc:uint16`
+	IeeeAddr      [8]uint8 `struc:[8]uint8`
+	SrcEndpoint uint8 `struc:uint8`
+	DestEndpoint uint8 `struc:uint8`
+	GroupId uint16 `struc:uint16`
 }
 
 type PermitJoiningPayload struct {
