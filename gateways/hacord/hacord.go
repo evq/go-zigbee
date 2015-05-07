@@ -14,31 +14,12 @@ const (
 	NodeResponse = 0x42
 )
 
-//Cmds
-const (
-	OnOff = 0x0400
-)
-
-//OnOff Values
-const (
-	HACordOff = 0x01
-	HACordOn = 0x00
-)
-
 type HACordPacket struct {
 	MsgType uint8
 	Sequence uint8
 	Cmd uint16
 	MsgLen uint8
-}
-
-type OnOffPayload struct {
-	Val uint8
-	NetAddr       uint16
-	IeeeAddr      [8]uint8
-	SrcEndpoint uint8
-	DestEndpoint uint8
-	GroupId uint16
+	//Payload []byte
 }
 
 type HACordGateway struct {
@@ -61,6 +42,7 @@ func (g *HACordGateway) SendAsync() error {
 
 
 func (g *HACordGateway) Send() error {
+	//pkt := HACordPacket{Command, g.Sequence, g.CurrentCmd, uint8(len(g.TXBuffer)), g.TXBuffer}
 	pkt := HACordPacket{Command, g.Sequence, g.CurrentCmd, uint8(len(g.TXBuffer))}
 
 	err := binary.Write(g.Conn, binary.BigEndian, pkt)

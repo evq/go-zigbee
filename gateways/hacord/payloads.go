@@ -1,13 +1,24 @@
 package hacord
 
-import (
-  "fmt"
-  "net"
-  "log"
-  "time"
+//Cmds
+const (
+	OnOff = 0x0400
 )
 
-// Message type
+//OnOff Values
+const (
+	HACordOff = 0x01
+	HACordOn = 0x00
+)
+
+type OnOffPayload struct {
+	Val uint8
+	NetAddr       uint16
+	IeeeAddr      [8]uint8
+	SrcEndpoint uint8
+	DestEndpoint uint8
+	GroupId uint16
+}
 
 type PermitJoiningPayload struct {
   DurationInSeconds uint8
