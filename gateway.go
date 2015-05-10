@@ -32,6 +32,7 @@ type AttributeResponse struct {
 
 type DeviceGateway interface {
 	Connect(address string) error
+	Reconnect() error
 	SendAsync() error
 	Send() error
 	PermitJoining(duration time.Duration) (chan JoinResponse, error)
@@ -44,8 +45,17 @@ type DeviceGateway interface {
 
 type HAGateway interface {
 	Connect(address string) error
+	Reconnect() error
 	SendAsync() error
 	Send() error
 	SetOnOff(z ZigbeeDevice, endpointid uint8, value uint8) error
-	SetLightLevel(z ZigbeeDevice, endpointid uint8, level uint8, transitiontime uint16) error
+	MoveToLightLevelWOnOff(z ZigbeeDevice, endpointid uint8, value uint8, transitiontime uint16) error
+	MoveToLightLevel(z ZigbeeDevice, endpointid uint8, level uint8, transitiontime uint16) error
+	MoveToHue(z ZigbeeDevice, endpointid uint8, hue uint8, transitiontime uint16) error
+	MoveToSat(z ZigbeeDevice, endpointid uint8, sat uint8, transitiontime uint16) error
+	MoveToHueSat(z ZigbeeDevice, endpointid uint8, hue uint8, sat uint8, transitiontime uint16) error
+	MoveToXY(z ZigbeeDevice, endpointid uint8, X uint16, Y uint16, transitiontime uint16) error
+	MoveToColorTemp(z ZigbeeDevice, endpointid uint8, temp uint16, transitiontime uint16) error
+	Loop(z ZigbeeDevice, endpointid uint8, starthue uint8, transitiontime uint16) error
+	StopLoop(z ZigbeeDevice, endpointid uint8, endhue uint8, transitiontime uint16) error
 }
