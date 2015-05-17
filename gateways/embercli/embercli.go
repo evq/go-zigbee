@@ -3,6 +3,7 @@ package embercli
 import (
 	"fmt"
 	"github.com/evq/go-zigbee"
+	log "github.com/Sirupsen/logrus"
 	"net"
 )
 
@@ -20,9 +21,8 @@ type EmberCliCmd struct {
 
 
 func (g *EmberCliGateway) Connect(address string) error {
-	var err error
-	g.Conn, err = net.Dial("tcp", address)
-	return err
+  g.Address = address
+	return g.Reconnect()
 }
 
 func (g *EmberCliGateway) Reconnect() error {
@@ -38,14 +38,15 @@ func (g *EmberCliGateway) SendAsync() error {
 
 func (g *EmberCliGateway) Send() error {
 
-	//fmt.Printf(g.TXBuffer.Cmd)
+	log.Debug("[zigbee/gateways/embercli] " + g.TXBuffer.Cmd[:len(g.TXBuffer.Cmd)-1])
 	_, err := g.Conn.Write([]byte(g.TXBuffer.Cmd))
 	if err != nil {
 		return err
 	}
 
-	//fmt.Printf("send 0x%x 0x%x 0x%x\n", g.TXBuffer.NetAddr, 0x01, g.TXBuffer.Endpoint)
-	_, err = g.Conn.Write([]byte(fmt.Sprintf("send 0x%x 0x%x 0x%x\n", g.TXBuffer.NetAddr, 0x01, g.TXBuffer.Endpoint)))
+	sendmsg := fmt.Sprintf("send 0x%x 0x%x 0x%x\n", g.TXBuffer.NetAddr, 0x01, g.TXBuffer.Endpoint)
+	log.Debug("[zigbee/gateways/embercli] " + sendmsg[:len(sendmsg)-1])
+	_, err = g.Conn.Write([]byte(sendmsg))
 
 	return err
 }

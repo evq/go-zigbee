@@ -2,31 +2,27 @@ package zigbee
 
 type ZigbeeDevice struct {
 	Name             string   `json:"name"`
-	Endpoints        []Endpoint `json:"-"`
+	Endpoints        map[uint8]*Endpoint `json:"-"`
 	NetAddr          uint16  `json:"netaddr"`
-	IeeeAddr         [8]uint8 `json:"ieeeaddr"`
+	IeeeAddr         uint64 `json:"ieeeaddr"`
 	ManufacturerCode uint16 `json:"-"`
 }
 
 // ZLL DeviceTypes
 const (
-	OnOffLight = 0x0000
-	OnOffPlug = 0x0010
-	DimmableLight = 0x0100
-	DimmablePlug = 0x0110
-	ColorLight = 0x0200
-	ExtendedColorLight = 0x0210
-	ColorTemperatureLight = 0x0220
+	ZLLOnOffLight = 0x0000
+	ZLLOnOffPlug = 0x0010
+	ZLLDimmableLight = 0x0100
+	HAOnOffLight = 0x0100
+	HADimmableLight = 0x0101
+	HAColorLight = 0x0102
+	ZLLDimmablePlug = 0x0110
+	ZLLColorLight = 0x0200
+	ZLLExtendedColorLight = 0x0210
+	ZLLColorTemperatureLight = 0x0220
 )
 
-// HA DeviceTypes
-//const (
-	//OnOffLight = 0x0100
-	//DimmableLight = 0x0101
-	//ColorLight = 0x0102
-//)
-
-// ProfileIDs
+// ProfileIds
 const (
 	HomeAutomation = 0x0104
 	LightLink      = 0xC05E
@@ -36,8 +32,8 @@ type Endpoint struct {
 	ID          uint8
 	Profile     uint16
 	DeviceType  uint16
-	InClusters  []Cluster
-	OutClusters []Cluster
+	InClusters  map[uint16]*Cluster
+	OutClusters map[uint16]*Cluster
 }
 
 // ZCL Clusters
@@ -62,7 +58,7 @@ const (
 	StackVersion
 	HWVersion
 	ManufacturerName
-	ModelID
+	ModelId
 	DateCode
 	PowerSource
 )
